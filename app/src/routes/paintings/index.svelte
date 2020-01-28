@@ -1,15 +1,4 @@
 <style>
-	h1, p {
-		text-align: center;
-		margin: 0 auto;
-	}
-
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
 	
 	table {
 		width: 100%;
@@ -28,12 +17,7 @@
 	p {
 		margin: 1em auto;
 	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
+	
 </style>
 
 <script context="module">
@@ -45,11 +29,26 @@
 </script>
 
 <script>
+	import {Painting} from "../../models/painting";
 	export let paintings;
 	
-	export function getCount() {
+	let form;
+	
+	function getCount() {
 		const count = paintings.length;
 		return count ? '('+count+')' : '';
+	}
+	
+	let newPainting = new Painting();
+	
+	function add() {
+		paintings.push(newPainting);
+		newPainting = new Painting;
+		paintings = paintings;
+	}
+	function del(i) {
+		paintings.splice(i, 1);
+		paintings = paintings;
 	}
 </script>
 
@@ -57,24 +56,43 @@
 	<title>Liste des peintures</title>
 </svelte:head>
 
-<p><strong>Voici la liste des peintures {getCount()}</strong></p>
+<p><strong>Voici la page de gestion des peintures {getCount()}</strong></p>
 
-<table>
-	<tr>
-		<th>Nom</th>
-		<th>Description</th>
-		<th>Aperçu</th>
-	</tr>
-	{#each paintings as painting}
+<section>
+	<h3>Liste</h3>
+	<table>
 		<tr>
-			<td>{painting.label}</td>
-			<td>{painting.description}</td>
-			<td>
-				<img class="icon" alt='peinture' src='{painting.src}'>
-			</td>
+			<th>Nom</th>
+			<th>Description</th>
+			<th>Aperçu</th>
+			<th>Actions</th>
 		</tr>
-	{/each}
-</table>
-<ul>
-
-</ul>
+		{#each paintings as painting, i}
+			<tr>
+				<td>{painting.label}</td>
+				<td>{painting.description}</td>
+				<td>
+					<img class="icon" alt='une joli peinture' src='{painting.src}'>
+				</td>
+				<td><button on:click={() => del(i)}>Supprimer</button></td>
+			</tr>
+		{/each}
+	</table>
+</section>
+<section>
+	<h3>Ajouter une peinture</h3>
+	<form on:submit|preventDefault={add}>
+		<section>
+			<label for=""label>Nom: <input id="label" type="text" required bind:value={newPainting.label}></label>
+		</section>
+		<section>
+			<label for="description">Description: <input id="description" type="text" required bind:value={newPainting.description}></label>
+		</section>
+		<section>
+			<label for="src">Nom: <input id="src" type="text" required bind:value={newPainting.src}></label>
+		</section>
+		<section>
+			<button type="submit">Ajouter</button>
+		</section>
+	</form>
+</section>

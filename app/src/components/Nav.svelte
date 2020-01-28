@@ -1,4 +1,5 @@
 <script>
+	import {authUser} from '../routes/_auth/auth.store'	
 	export let segment;
 </script>
 
@@ -57,5 +58,14 @@
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
 		<li><a rel=prefetch class:selected='{segment === "blog"}' href='blog'>blog</a></li>
+		
+		<li>
+			{#if $authUser}
+				<p>Bienvenue {$authUser.name}</p>
+				<button on:click={() => authUser.logout()}>Se déconnecter</button>
+			{:else}
+				<button on:click={() => authUser.login()}>Connectez vous!</button>
+			{/if}
+		</li>
 	</ul>
 </nav>
