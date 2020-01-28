@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+
+  #traefik:
+  #  image: traefik:2.0
+  #  command:
+  #    - --providers.docker
+  #    - --providers.docker.exposedByDefault=false
+  #  ports:
+  #    - "80:80"
+  #    - "3000:3000"
+  #    - "5000:5000"
+  #    - "10000:10000"
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+
+  app:
+    image: thecodingmachine/nodejs:12
+    #labels:
+    #  - traefik.enable=true
+    #  - traefik.http.routers.front_router.rule=Host(`sapper.localhost`)
+    #  #- traefik.http.routers.mailcatcher.service=front_service
+    #  - traefik.http.services.front_service.loadbalancer.server.port=3000
+    ports:
+      - "80:80"
+      - "3000:3000"
+      - "3001:3001"
+      - "5000:5000"
+      - "10000:10000"
+    environment:
+      STARTUP_COMMAND_1: "npm install"
+      STARTUP_COMMAND_2: "npm run dev"
+    volumes:
+      - ./app:/usr/src/app:rw
